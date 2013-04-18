@@ -28,3 +28,7 @@ Resources:
 [General example]: http://tataryn.net/2011/10/whats-in-a-scala-for-comprehension/
 
 [Implementation]:https://code.google.com/p/scalacheck/source/diff?spec=svn506&r=506&format=side&path=/trunk/src/main/scala/org/scalacheck/Gen.scala
+
+#Motivation:#
+#PUPPIES!!!#
+The filter function will apply itself to an entire list and return a sublist.  WithFilter will apply on an element by element basis if it is called by another function.  The functionality of withfilter over filter is that withFilter can use side effects from the body of a for statement to alter the guard.  The example code below? shows how filter is applied to the entirety of an immutable list, and how withFilter can be applied element by element when called by iterative functions.  When applied to transversable elments, this changes the monadic interpretations of -for- statements in the Scala language.
