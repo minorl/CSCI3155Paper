@@ -38,9 +38,9 @@ scala> List.range(1,10).withFilter(_ % 2 == 1 && !found).foreach(x => if (x == 5
 
 ```
 
+Motivation:
 
-
-Motivation: Why do people want this?
+The filter function will apply itself to an entire list and return a sublist. WithFilter will apply on an element by element basis if it is called by another function. The functionality of withfilter over filter is that withFilter can use side effects from the body of a for statement to alter the guard. The example code below? shows how filter is applied to the entirety of an immutable list, and how withFilter can be applied element by element when called by iterative functions. When applied to transversable elments, this changes the monadic interpretations of -for- statements in the Scala language.
 
 Rejected ideas: What were some other solutions?
 
