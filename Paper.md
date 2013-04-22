@@ -64,6 +64,10 @@ Motivation:
 
 The filter function will apply itself to an entire list and return a sublist. WithFilter will apply on an element by element basis if it is called by another function. The functionality of withfilter over filter is that withFilter can use side effects from the body of a for statement to alter the guard. The example code below? shows how filter is applied to the entirety of an immutable list, and how withFilter can be applied element by element when called by iterative functions. When applied to transversable elments, this changes the monadic interpretations of -for- statements in the Scala language.
 
+Implementation:
+
+The actual implementation of filter is simply a for-yeild statement that iterates through an entire transversable object.  It uses the function that the filter is applying in the body of the for-yield statement to return a transversable object.  This shows the "strictness" of filter eg the entire object is traversed before any other operation may be applied to the input.  On the other hand, the implementation of withFilter is not a for-yeild statement.  Instead it is implemented on the idea that another method can be applied simultaneously such as map, flatmap, foreach, or even another withfilter.  With this in mind withFilter applies the operation that follows as it applies the filtering function.  The result of these two implementations is that when chained with map, flatmap, etc. filter will apply these post hoc while withFilter will apply them as the transverable object is iterated.
+
 Rejected ideas: What were some other solutions?
 
 Accepted idea: Why was withFilter accepted when other things weren't?
@@ -91,4 +95,10 @@ Resources:
 
 [Implementation]:https://code.google.com/p/scalacheck/source/diff?spec=svn506&r=506&format=side&path=/trunk/src/main/scala/org/scalacheck/Gen.scala
 
+<<<<<<< HEAD
+Motivation:
+PUPPIES!!!
+The filter function will apply itself to an entire list and return a sublist.  WithFilter will apply on an element by element basis if it is called by another function.  The functionality of withfilter over filter is that withFilter can use side effects from the body of a for statement to alter the guard.  The example code below? shows how filter is applied to the entirety of an immutable list, and how withFilter can be applied element by element when called by iterative functions.  When applied to transversable elments, this changes the monadic interpretations of -for- statements in the Scala language.
+=======
 [Scala API - List]: http://www.scala-lang.org/api/current/index.html#scala.collection.immutable.List
+>>>>>>> e7afbd5c2d6b9c6588eb607caf597a3c2d07c793
