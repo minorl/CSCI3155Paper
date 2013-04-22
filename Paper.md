@@ -38,6 +38,28 @@ scala> List.range(1,10).withFilter(_ % 2 == 1 && !found).foreach(x => if (x == 5
 
 ```
 
+#Erik's Stuff
+
+Users new to Scala are often confused by the many nuances inherent in functional programming. Complicated expressions and datatypes in analogous imperative languages are reduced to mere lines of code, the mechanics of which lie hidden behind the elegance of recursive statements with functions as values. The filter and withFilter classes are ideal examples of this high-level abstraction. Their respective implementations appear essentially identical, and both will produce the same results.
+
+--figure-- --figure--
+
+Scala did not originally include the class withFilter but instead was added as a result of community discussion (cite sources). It offers performance benifits over filter under certain circumstances, extends a different class in the type hierarchy (cite scala-lang.org), and even returns a different value type. These characteristics first appear counter-intuitive, given how similiar their code is to use in practice. In highlighting the differences between the classes the question is not what the filters are doing, or when they are used, but in how the are implemented.
+
+Filter extends the transformer class and works by applying some conditional over all elements of a list. This conditional can come in a variety of flavors, from simple comparison statements to complicated functions. Applying multiple filters to a list causes a chaining process which requires the list to be iterated over per-filter. This results in a complexity of n^m, where n is the size of the list and m is the filter total (cite source). As lists become large, and the chaining becomes verbose, there is potentially a very costly computation associated with use of the filter class.
+
+withFilter differs very subtley from its counterpart by a change in its return type. Like filter, it applies a conditional over a list, but cannot traverse a list by itself to perform that filtering. Instead, withFilter requires a map, flatmap, or foreach statement to act on its return value. (more apply?) When this statement then iterates over the list the withFilter gets applied to each element as it does. This is an enormous boon to performance, as it ensures that the list is traversed only once, no matter how complex of a filter is used.
+
+--output samples-- scala> testlist.withFilter(x => (x%2 == 0 )).map(x => x) res3: List[Int] = List(10, 20, 30, 50)
+
+scala> testlist.withFilter(x => (x%2 == 0 )) res4: scala.collection.generic.FilterMonadic[Int,List[Int]] = scala.collection.TraversableLike$WithFilter@257db177
+
+scala> testlist.filter(x => (x%2 == 0 )).map(x => x) res5: List[Int] = List(10, 20, 30, 50)
+
+scala> testlist.filter(x => (x%2 == 0 )) res6: List[Int] = List(10, 20, 30, 50) --output samples--
+
+PS: I'm not sure what benefit this really has with respect to guards. MOAR RESEARCH NEEDED <3
+
 Motivation:
 
 The filter function will apply itself to an entire list and return a sublist. WithFilter will apply on an element by element basis if it is called by another function. The functionality of withfilter over filter is that withFilter can use side effects from the body of a for statement to alter the guard. The example code below? shows how filter is applied to the entirety of an immutable list, and how withFilter can be applied element by element when called by iterative functions. When applied to transversable elments, this changes the monadic interpretations of -for- statements in the Scala language.
