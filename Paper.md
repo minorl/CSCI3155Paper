@@ -1,6 +1,17 @@
 Introduction (purpose: power of community discussion and cocain:
 
-Scala did not originally include the withFilter class in its early implementations.  It was instead added in version 2.8 as a result of community discussion to address the particulars of filter and how guards with side effects work.  This discourse highlights a popular approach in the open source community to identify problems, discuss new ideas, and design functionality using direct feedback from users and other developers.  Martin Odersky communicated with the scala community through a mailing list to address open tickets requesting new for-expression behaviors.  The subsequent discussion resulted in the addition of a new class called withFilter.  At first glance, it may appear that withFilter and filter are identical due to the syntax and situations in which they are used.  Understanding the motivations and implementations of the two methods highlights the benefits of an open source community driven language.  
+Scala did not originally include the withFilter class in its early implementations.  It was instead added in version 2.8 as a result of community discussion to address the particulars of filter and how guards with side effects work.  This discourse highlights a popular approach in the open source community to identify problems, discuss new ideas, and design functionality using direct feedback from users and other developers.  Martin Odersky communicated with the scala community through a mailing list to address open tickets requesting new for-expression behaviors.  The discussion that followed resulted in the addition of a new method called withFilter.  At first glance, it may appear that withFilter and filter are identical due to the syntax and situations in which they are used.  Understanding the motivations and implementations of the two methods highlights the benefits of an open source community driven language.  
+
+When Martin Odersky first proposed changes to how the filter method behaved he was met with both support and resistance from the mailing list.  His suggestion to resolve the open tickets revolved around where to place the guard within the for-expression and the impact that this change would have on the for-yield expression.  In making this change, and ensuring for-yield still performed as expected, additional cases would be required for functions filterForeach, filterMap, filterFlatMap inside the generator classes.  Replies to Martin’s post initially revolved around matters of complexity and optimization.  Specifically, how would the optimizer determine if a filter was side-effect free, and where would the additional complexity be incurred?  Would the boost in performance anticipated by such a change be worth the complication in implementation?  
+
+Finally rejected
+
+
+
+- timing of 2.8 coming out
+- making it more complex
+- making the change in the optimizer 
+//subsequent discussion
 
 Motivation:
 According to a post by Martin Odersky, the main motivations for expanding filter are:
@@ -19,7 +30,7 @@ What does it return?
  List((0,0), (0,1), (1,0), (1,1), (1,2), (1,3), (2,0), (2,1), (2,2), (2,3))
 <citation>
 
-From this simple example we see that one of the indices captures the value of ‘limit’ before it is changed and the second captures the value of ‘limit’ after it is changed in the body.  This behavior is, to say it nicely, non-intuitive.  The second motivation is one of performance.  Consider a case where a programmer chains filter with another iterative function such as Map.  In this case the transversable object would be iterated over two times.  Now consider if more more and more chains of functions were used.  With every function that gets chained, the input needs to be traversed once again.  A more efficient implementation would only need to traverse the input a single time applying each of the chained functions to a single element as it iterates.  With these two reasons in mind, Ordersky formed the ORTHOGONAL basis a new set of functions.  His original idea was to write filterMap, filterFlatMap, and filterForeach.  This idea was reformulated into a single function; withFilter.
+From this simple example we see that one of the indices captures the value of ‘limit’ before it is changed and the second captures the value of ‘limit’ after it is changed in the body.  This behavior is, to say it nicely, non-intuitive.  The second motivation is one of performance.  Consider a case where a programmer chains filter with another iterative function such as Map.  In this case the transversable object would be iterated over two times.  Now consider if more more and more chains of functions were used.  With every function that gets chained, the input needs to be traversed once again.  A more efficient implementation would only need to traverse the input a single time applying each of the chained functions to a single element as it iterates.  With these two reasons in mind, Ordersky formed the basis a new set of functions.  His original idea was to write filterMap, filterFlatMap, and filterForeach.  This idea was reformulated into a single function; withFilter.
 
 Because filter will apply itself to an entire list and return a sublist and WithFilter will apply on an element by element basis if it is called by another function. The functionality of withfilter over filter is that withFilter can use side effects from the body of a for statement to alter the guard. The example code below? shows how filter is applied to the entirety of an immutable list, and how withFilter can be applied element by element when called by iterative functions. When applied to transversable elements, this changes the monadic interpretations of -for- statements in the Scala language.
 Implementation:
@@ -29,4 +40,6 @@ Accepted idea: Why was withFilter accepted when other things weren't?
 Implementation: Maybe go into the implementation, uses flat map so this is relevent. Also, maybe check to see if it has been changed in more recent revisions
 
 Conclusions:
+
 Citations:
+http://www.scala-lang.org/node/3807 Meetings to Discuss withFilter? Oct 2009
