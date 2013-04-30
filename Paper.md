@@ -1,4 +1,4 @@
-Introduction (purpose: power of community discussion and cocain:
+Introduction (purpose: power of community discussion):
 
 Scala did not originally include the withFilter class in its early implementations.  It was instead added in version 2.8 as a result of community discussion to address the particulars of filter and how guards with side effects work.  This discourse highlights a popular approach in the open source community to identify problems, discuss new ideas, and design functionality using direct feedback from users and other developers.  Martin Odersky communicated with the scala community through a mailing list to address open tickets requesting new for-expression behaviors.  The discussion that followed resulted in the addition of a new method called withFilter.  At first glance, it may appear that withFilter and filter are identical due to the syntax and situations in which they are used.  Understanding the motivations and implementations of the two methods highlights the benefits of an open source community driven language.  
 
